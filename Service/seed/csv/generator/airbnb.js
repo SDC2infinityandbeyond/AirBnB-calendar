@@ -16,7 +16,7 @@ const logger = (writer, time_init, time_final, rooms, reservations_per_room, num
 
   const statistics = `
 \tFile: ${writer.path}
-\tNo. Records: ${num_records.toFixed(3)}
+\tNo. Records: ${num_records}
 \tWrite Time: ${time_delta.toFixed(3)} seconds
 \tWrite Speed: ${speed.toFixed(3)} records/second
 `;
