@@ -1,0 +1,34 @@
+psql -U postgres
+\c airbnb
+ALTER TABLE reservations ADD CONSTRAINT reservations_fk FOREIGN KEY (room_id) REFERENCES rooms (room_id) ON DELETE CASCADE;
+CREATE INDEX rooms_room_id on rooms (room_id);
+CREATE INDEX reservations_reservation_id ON reservations (reservation_id);
+CREATE INDEX reservations_room_id ON reservations (room_id);
+
+EXPLAIN ANALYZE SELECT * FROM rooms WHERE room_id=1000000;
+EXPLAIN ANALYZE SELECT * FROM rooms WHERE room_id=3000000;
+EXPLAIN ANALYZE SELECT * FROM rooms WHERE room_id=6000000;
+EXPLAIN ANALYZE SELECT * FROM rooms WHERE room_id=10000000;
+
+EXPLAIN ANALYZE SELECT * FROM reservations WHERE reservation_id=1000000;
+EXPLAIN ANALYZE SELECT * FROM reservations WHERE reservation_id=3000000;
+EXPLAIN ANALYZE SELECT * FROM reservations WHERE reservation_id=6000000;
+EXPLAIN ANALYZE SELECT * FROM reservations WHERE reservation_id=10000000;
+EXPLAIN ANALYZE SELECT * FROM reservations WHERE reservation_id=15000000;
+EXPLAIN ANALYZE SELECT * FROM reservations WHERE reservation_id=21000000;
+EXPLAIN ANALYZE SELECT * FROM reservations WHERE reservation_id=28000000;
+EXPLAIN ANALYZE SELECT * FROM reservations WHERE reservation_id=36000000;
+EXPLAIN ANALYZE SELECT * FROM reservations WHERE reservation_id=45000000;
+EXPLAIN ANALYZE SELECT * FROM reservations WHERE reservation_id=55000000;
+EXPLAIN ANALYZE SELECT * FROM reservations WHERE reservation_id=66000000;
+EXPLAIN ANALYZE SELECT * FROM reservations WHERE reservation_id=78000000;
+EXPLAIN ANALYZE SELECT * FROM reservations WHERE reservation_id=91000000;
+EXPLAIN ANALYZE SELECT * FROM reservations WHERE reservation_id=92000000;
+EXPLAIN ANALYZE SELECT * FROM reservations WHERE reservation_id=94000000;
+EXPLAIN ANALYZE SELECT * FROM reservations WHERE reservation_id=97000000;
+EXPLAIN ANALYZE SELECT * FROM reservations WHERE reservation_id=100000000;
+
+EXPLAIN ANALYZE SELECT * FROM reservations WHERE room_id=1000000;
+EXPLAIN ANALYZE SELECT * FROM reservations WHERE room_id=3000000;
+EXPLAIN ANALYZE SELECT * FROM reservations WHERE room_id=6000000;
+EXPLAIN ANALYZE SELECT * FROM reservations WHERE room_id=10000000;
