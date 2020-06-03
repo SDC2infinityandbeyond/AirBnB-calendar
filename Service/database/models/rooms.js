@@ -6,7 +6,11 @@ const { Schema } = mongoose;
 
 // parent schema
 const rooms_schema = new Schema({
-  room_id: Schema.Types.ObjectId,
+  room_id: {
+    type: Number,
+    unique: true,
+    required: true,
+  },
   nightly_rate: {
     type: Number, 
     required: true,
