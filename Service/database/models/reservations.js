@@ -8,10 +8,15 @@ const { Schema } = mongoose;
 
 // child schema
 const reservations_schema = new Schema({
-  reservation_id: Schema.Types.ObjectId,
+  reservation_id: {
+    type: Number,
+    unique: true,
+    required: true,
+  },
   room_id: {
-    type: Schema.Types.ObjectId,
+    type: Number,
     ref: parent,
+    required: true,
   },
   check_in: {
     type: Date,
@@ -21,7 +26,7 @@ const reservations_schema = new Schema({
     type: Date,
     required: true,
   },
-  total: {
+  cost: {
     type: Number,
     required: true,
   }
