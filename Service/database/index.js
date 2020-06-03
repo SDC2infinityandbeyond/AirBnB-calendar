@@ -1,22 +1,32 @@
-/* eslint-disable no-console */
-const { Client } = require('pg');
+const colors = require('colors');
+const Promise = require('bluebird');
+const mongoose = Promise.promisifyAll(require('mongoose'));
 
-const client = new Client({
-  host: 'reservation_db',
-  port: 5432,
-  user: 'postgres',
-  password: 'postgres',
-  database: 'air_bnb',
+// conn configuration
+const SERVER = '127.0.0.1:27017';
+const DB = 'airbnb';
+const URI = `mongodb://${SERVER}/${DB}`;
+const OPTIONS = {
+  useCreateIndex: true,
+  useNewUrlParser: true,
+  useFindAndModify: false,
+  useUnifiedTopology: true,
+};
+
+// initial conn and handle initial conn errors
+mongoose.connect(URI, OPTIONS)
+  .then(() => console.log(`Connected to ${colors.green('MongoDB')}`))
+  .catch(console.error);
+
+// conn to database
+const db = mongoose.connection;
+
+// handle errors after initial conn was established by listening for error events on the conn
+db.on('error', (err) => console.error(err));
+
+// successful conn
+db.once('open', () => {
+  console.log(`Using database ${db.name.green}`);
 });
-// 'postgres:postgres:@localhost:5432/air_bnb'
 
-client.connect((err) => {
-  if (err) {
-    console.log('ERROR postgres', err);
-  } else {
-    console.log('Connected successfuly to postgres air_bnb');
-  }
-});
-
-
-module.exports = client;
+module.exports.db;
