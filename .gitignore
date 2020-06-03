@@ -1,6 +1,10 @@
 csvs/
+Service/seed/sql/airbnb.pgsql
+Service/seed/nosql/airbnb/
 Service/seed/csv/generator/reservations.js
 Service/seed/csv/generator/rooms.js
+Service/seed/csv/*.rar
+Service/database/test.js
 
 ## MAC files ##
 .DS_Store
