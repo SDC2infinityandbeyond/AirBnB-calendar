@@ -50,7 +50,7 @@ const generate_csv = (write_streams, num_partitions, encoding, callback, tbl_nam
 
   let two_weeks_in_milliseconds = null;
   let two_weeks_in_days = null;
-  let two_hours_in_milliseconds = null;
+  let one_day_in_milliseconds = null;
   let check_in = null;
   let rotate = null;
 
@@ -60,10 +60,10 @@ const generate_csv = (write_streams, num_partitions, encoding, callback, tbl_nam
     fields = ['reservation_id', 'room_id', 'check_in', 'check_out', 'cost'];
     two_weeks_in_milliseconds = 2 * 7 * 24 * 60 * 60 * 10 ** 3;
     two_weeks_in_days = 2 * 7;
-    two_hours_in_milliseconds = 2 * 60 * 60 * 10 ** 3;
+    one_day_in_milliseconds = 24 * 60 * 60 * 10 ** 3;
     
     // first check_in 
-    check_in = new Date();
+    check_in = new Date(new Date().toISOString().split('T').shift());
     
     
     // variable to know when to increment room_id
@@ -119,8 +119,8 @@ const generate_csv = (write_streams, num_partitions, encoding, callback, tbl_nam
         let multiplier = person_capacity[person_index] > 1 ? [1.0, 1.15][_.random(0, 1)] : 1.0; // e.g. Adults only, Adults + Children
         let cost = (nightly_rate[night_index] * two_weeks_in_days * multiplier * (1 + tax_rate[tax_index] * 10 ** -2)).toFixed(2);
 
-        data = `${iteration},${room_id},${check_in.toISOString()},${check_out.toISOString()},${cost}\n`;
-        check_in = new Date(check_out.valueOf() + two_hours_in_milliseconds);
+        data = `${iteration},${room_id},${check_in.toISOString().split('T').shift()},${check_out.toISOString().split('T').shift()},${cost}\n`;
+        check_in = new Date(check_out.valueOf() + one_day_in_milliseconds);
 
         // increment room_id
         if (rotate === reservations_per_room) {
@@ -129,7 +129,7 @@ const generate_csv = (write_streams, num_partitions, encoding, callback, tbl_nam
           night_index += 1;
           tax_index += 1;
           person_index += 1;
-          check_in = new Date();
+          check_in = new Date(new Date().toISOString().split('T').shift());
         }
 
         // reset indices
