@@ -58,11 +58,47 @@ const getReservationsCount = async () => {
   return await count;
 };
 
-const getReservationsByRoomId = (room_id) => {
-  Reservations.find({ room_id }, (err, results) => {
-    err ? console.error(err) : console.log(results);
+const findReservationsByRoomId = async (room_id) => {
+  const reservations = new Promise((resolve, reject) => {
+    Reservations.find({ room_id }, (err, results) => {
+      err ? reject(err) : resolve(results);
+    });
   });
+
+  return await reservations;
 };
+
+const isValidCheckInAndOut = async (room_id, check_in, check_out) => {
+  let isValidReservation = true
+
+  try {
+    const reservationsByRoomId = await findReservationsByRoomId(room_id);
+
+    for (let i = 0; i < reservationsByRoomId.length; i++) {
+      let reservation = reservationsByRoomId[i];
+
+      if (check_in.valueOf() >= reservation.check_in.valueOf()
+        && check_in.valueOf() <= reservation.check_out.valueOf()
+      ) {
+        isValidReservation = false;
+        break; 
+      }
+
+      if (check_out.valueOf() >= reservation.check_in.valueOf()
+        && check_out.valueOf() <= reservation.check_out.valueOf()
+      ) {
+        isValidReservation = false;
+        break; 
+      }
+    }
+
+    return isValidReservation;
+
+  } catch(err) {
+    throw err;
+  } 
+};
+
 
 // db.reservations.deleteOne({_id: ObjectId("5ed99d914409b31c54d9d584")})
 // db.reservations.deleteOne({_id: ObjectId("5ed99c555e41101c7c22fa41")})
@@ -83,20 +119,24 @@ const getReservationsByRoomId = (room_id) => {
 const insertReservation = async (req, res) => {
   const reservation = req.body;
   const { room_id } = reservation;
+  const check_in = new Date(reservation.check_in);
+  const check_out = new Date(reservation.check_out);
 
   try {
-    if (await isValidRoom(room_id)) {
+    if (await isValidRoom(room_id) 
+      && await isValidCheckInAndOut(room_id, check_in, check_out)
+    ) {
       reservation.reservation_id = await getReservationsCount() + 1;
-
-      getReservationsByRoomId(reservation.room_id);
 
       new Reservations(reservation).save()
         .then((confirmation) => res.send(confirmation))
         .catch(handleError(res));
 
     } else {
-      console.error(`Error: invalid room { room_id: ${room_id} }`.red);
-      res.status(500).send({ err: `invalid room { room_id: ${room_id} }` });
+      const errorType = 'ReservationsError';
+      const errorMessage = `invalid reservation ${JSON.stringify(reservation)}`
+      console.error(`${errorType}: ${errorMessage}`.red);
+      res.status(500).send({ [errorType]: errorMessage });
     }
   } catch(err) {
     console.error(`${err}`.red);
