@@ -5,6 +5,8 @@ Service/seed/csv/generator/reservations.js
 Service/seed/csv/generator/rooms.js
 Service/seed/csv/*.rar
 Service/database/test.js
+Service/server/test.js
+Service/seed/run_mongo_import.bash
 
 ## MAC files ##
 .DS_Store
