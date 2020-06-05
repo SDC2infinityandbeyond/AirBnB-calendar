@@ -18,7 +18,7 @@
     "csv:airbnb": "node --max-old-space-size=4096 ./seed/csv/generator/airbnb.js",
     "nosql:rooms1": "mongoimport --type csv -d airbnb -c rooms --headerline --drop --file ./seed/csv/rooms1.csv",
     "nosql:rooms2": "mongoimport --type csv -d airbnb -c rooms --headerline --file ./seed/csv/rooms2.csv",
-    "nosql:reservations1": "mongoimport --host 54.215.113.110 --type csv -d airbnb -c reservations --headerline --drop --file ./seed/csv/reservations1.csv",
+    "nosql:reservations1": "mongoimport --type csv -d airbnb -c reservations --headerline --drop --file ./seed/csv/reservations1.csv",
     "nosql:reservations2": "mongoimport --type csv -d airbnb -c reservations --headerline --file ./seed/csv/reservations2.csv",
     "nosql:reservations3": "mongoimport --type csv -d airbnb -c reservations --headerline --file ./seed/csv/reservations3.csv",
     "nosql:reservations4": "mongoimport --type csv -d airbnb -c reservations --headerline --file ./seed/csv/reservations4.csv",
