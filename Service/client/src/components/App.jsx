@@ -70,7 +70,8 @@ class App extends React.Component {
           },
         });
         // console.log(that.state);
-      });
+      })
+      .catch(console.error);
   }
 
 
