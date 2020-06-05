@@ -1,35 +1,48 @@
+const colors = require('colors');
 const express = require('express');
-const bodyParser = require('body-parser');
-const db = require('../database/index.js');
 const expressStaticGzip = require('express-static-gzip');
+const morgan = require('morgan');
+const path = require('path');
+const spdy = require('spdy');
+const query = require('../database/query.js');
+const options = require('./config.js');
 
-
+const port = 3002;
 const app = express();
 
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
-
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
   next();
 });
-
+app.use(morgan('dev'));
 app.use('/', expressStaticGzip(`${__dirname}/../client/dist`));
+
 app.get('/data', (req, res) => {
-  const queryStr = 'SELECT * FROM homes';
+  const data = [
+    0,
+    1,
+    2,
+    3,
+    {
+      guest_limit: 16,
+      cleaning_fee: 100,
+      service_fee: 50,
+      tax: 5,
+      price: 75,
+      reviews: 200,
+      rating: 4.5,
+    },
+  ];
 
-  db.query(queryStr, (err, result) => {
-    if (err) {
-      res.send(`ERROR, ${err}`);
-    } else {
-      res.send(result.rows);
-    }
-  });
+  res.send(data); 
 });
-
-
-app.listen(3002, () => {
-  // eslint-disable-next-line no-console
-  console.log('Server listening on port 3002....');
+app.get('/rooms/:room_id', query.findRoomById);
+app.get('/reservations/:reservation_id', query.findReservationById);
+app.post('/reservations', query.insertReservation);
+app.delete('/reservations')
+spdy.createServer(options, app).listen(port, (err) => {
+  err ? console.error(`${err}`.red) : console.log(`HTTP/2 server listening on port ${colors.green(port)}`)
 });

@@ -11,6 +11,7 @@ const OPTIONS = {
   useNewUrlParser: true,
   useFindAndModify: false,
   useUnifiedTopology: true,
+  poolSize: 5,
 };
 
 // initial conn and handle initial conn errors
