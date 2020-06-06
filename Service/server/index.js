@@ -1,3 +1,5 @@
+require('newrelic');
+
 const colors = require('colors');
 const express = require('express');
 const expressStaticGzip = require('express-static-gzip');
