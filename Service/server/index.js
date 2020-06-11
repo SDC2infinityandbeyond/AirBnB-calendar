@@ -45,6 +45,4 @@ app.get('/rooms/:room_id', query.findRoomById);
 app.get('/reservations/:reservation_id', query.findReservationById);
 app.post('/reservations', query.insertReservation);
 
-spdy.createServer(options, app).listen(port, (err) => {
-  err ? console.error(`${err}`.red) : console.log(`HTTP/2 server listening on port ${colors.green(port)}`)
-});
+app.listen(port, () => console.log(`ExpressJS application listening on port ${colors.green(port)}`));
