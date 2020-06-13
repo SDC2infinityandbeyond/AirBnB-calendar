@@ -1,5 +1,5 @@
 require('newrelic');
-
+require('dotenv').config();
 const colors = require('colors');
 const express = require('express');
 const expressStaticGzip = require('express-static-gzip');
@@ -9,7 +9,7 @@ const spdy = require('spdy');
 const query = require('../database/query.js');
 const options = require('./config.js');
 
-const port = 3002;
+const port = process.env.NODE_SERVER_PORT || 3000;
 const app = express();
 
 app.use(express.urlencoded({ extended: false }));
@@ -45,4 +45,6 @@ app.get('/rooms/:room_id', query.findRoomById);
 app.get('/reservations/:reservation_id', query.findReservationById);
 app.post('/reservations', query.insertReservation);
 
-app.listen(port, () => console.log(`ExpressJS application listening on port ${colors.green(port)}`));
+spdy.createServer(options, app).listen(port, (err) => {
+  err ? console.log(err) : console.log(`HTTP SPDY server listening on port ${port}`)
+});
