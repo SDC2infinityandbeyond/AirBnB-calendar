@@ -66,6 +66,8 @@
   npm run server-dev
 ```
 
+#### &emsp;&emsp;&emsp;&emsp;Now visit _[http://localhost:3000/](http://localhost:3000/)_ to see the React application
+
 ## Server API
 
 ### Get pricing, fees, and room info
@@ -212,7 +214,6 @@
       unique: true,
       required: true,
     },
-    reservations: [Number], // array of reservation id's
     nightly_rate: {
       type: Number,
       required: true,
