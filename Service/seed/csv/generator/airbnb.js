@@ -214,7 +214,7 @@ Write Speed: ${speed.toFixed(3)} records/second
 /* csv file generator configuration */
 const tables = {
   rooms: {
-    partitions: 2
+    partitions: 1 // 2
   },
   reservations: {
     partitions: 10,
