@@ -2,22 +2,17 @@
 
 # HRSF127 SDC Group 2: 2-infinity-and-beyond
 
-## 0. Getting Started
+## 1. Getting Started
 
 ```sh
-  $ cd Service/
-```
-
-## 1. Install dependencies
-
-```sh
-  Service/ $ npm install
+  cd Service/
+  npm install
 ```
 
 ## 2. Generate CSV Files
 
 ```sh
-  Service/ $ npm run csv:airbnb
+  npm run csv:airbnb
 ```
 
 ## 3. Seeding
@@ -25,16 +20,53 @@
 ### PostgreSQL
 
 ```sh
-  Service/ $ npm run sql:seed
+  npm run sql:seed
+```
+
+1. Start _psql_ shell as *__postgres__* in a new terminal
+
+```sh
+    psql -U postgres
+```
+
+2. Enter the following commands into the _psql_ command prompt
+
+```sh
+    \c airbnb
+    ALTER TABLE reservations ADD CONSTRAINT reservations_fk FOREIGN KEY (room_id) REFERENCES rooms (room_id) ON DELETE CASCADE;
+    CREATE INDEX rooms_room_id on rooms (room_id);
+    CREATE INDEX reservations_reservation_id ON reservations (reservation_id);
+    CREATE INDEX reservations_room_id ON reservations (room_id);
 ```
 
 ### MongoDB
 
 ```sh
-  Service/ $ npm run nosql:seed
+  npm run nosql:seed
 ```
 
----
+1. Start _mongo_ shell in a new terminal
+
+```sh
+    mongo
+```
+
+2. Enter the following commands into the _mongo_ command prompt
+
+```sh
+    use airbnb;
+    db.rooms.createIndex( { room_id: 1 } )
+    db.reservations.createIndex( { reservation_id: 1 } )
+    db.reservations.createIndex( { room_id: 1 } )
+```
+
+## 4. Start the NodeJS Server
+
+```sh
+  npm run server-dev
+```
+
+#### &emsp;&emsp;&emsp;&emsp;Now visit _[http://localhost:3000/](http://localhost:3000/)_ to see the React application
 
 ## Server API
 
@@ -80,7 +112,7 @@
 
 ### Get reservation info
 
-* GET `/rooms/:room_id/reservation/:reserve_id`
+* GET `/reservation/:reserve_id`
 
 **Path Parameters:**
 
@@ -101,7 +133,7 @@
     }
 ```
 
-### Update room info
+<!-- ### Update room info
 
 * PATCH `/rooms/:room_id/`
 
@@ -131,7 +163,7 @@
 * `reservation_id` reservation id
 * `room_id` room id
 
-**Success Status Code:** `204`
+**Success Status Code:** `204` -->
 
 ---
 
@@ -182,7 +214,6 @@
       unique: true,
       required: true,
     },
-    reservations: [Number], // array of reservation id's
     nightly_rate: {
       type: Number,
       required: true,
