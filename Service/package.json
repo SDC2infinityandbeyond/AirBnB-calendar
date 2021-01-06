@@ -26,7 +26,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.9.6",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-react": "^6.24.1",
     "bluebird": "^3.7.2",
